@@ -62,9 +62,8 @@ def ransac_fit_ellipse(pts, max_trials=200, residual_threshold=1.0, min_samples=
 
 # 曲率与凸性分析
 def extract_robust_integrated_curves(contour, epsilon_factor=0.005, sharp_turn_thresh=np.pi / 3,
-                                     straight_angle_thresh=172):
+                                     straight_angle_thresh=174):
     """
-    整合 PDR 算法与 R 算法的过滤思想：
     1. 宏观：RDP 逼近 + 曲率符号(凸性) + 急转弯切割
     2. 微观：动态跨度滑动窗口 -> 剔除遮挡造成的直线边缘
     """
@@ -127,7 +126,7 @@ def extract_robust_integrated_curves(contour, epsilon_factor=0.005, sharp_turn_t
     # Step 2: 动态 dist
     # ==========================================
     straight_mask = np.zeros(N_orig, dtype=bool)
-    # 🌟 策略二核心：动态计算跨度
+    # 动态计算跨度
     # 基准：长度 180 的轮廓，dist 取 6 比较合适 (180/30 = 6)
     #设置保底最小跨度 4，最大跨度 10 (防止轮廓过大导致跨度越过半个椭圆)
     dynamic_dist = max(4, min(int(N_orig / 30), 10))
@@ -337,11 +336,11 @@ def build_feature_cache():
     # 打印最终的平均内点比例
     if len(test_ratios) > 0:
         avg_ratio = np.mean(test_ratios)
-        print(f"\n📊 测试集平均内点比例 (Inlier Ratio): {avg_ratio:.4f} ({avg_ratio * 100:.2f}%)")
+        print(f"\n 测试集平均内点比例 (Inlier Ratio): {avg_ratio:.4f} ({avg_ratio * 100:.2f}%)")
     else:
-        print("\n📊 警告: 测试集中未提取到有效的 RANSAC 拟合数据。")
+        print("\n 警告: 测试集中未提取到有效的 RANSAC 拟合数据。")
 
-    print("\n✅ 所有缓存文件生成完毕！")
+    print("\n 所有缓存文件生成完毕！")
 
 if __name__ == "__main__":
     build_feature_cache()
